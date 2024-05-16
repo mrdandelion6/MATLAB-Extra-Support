@@ -19,6 +19,7 @@ disp(y);
 ```
 You can also run the current section of code and all code above it by pressing **ctrl + shift + enter** or using the `Run Current Section and all Above` command through command palette.
 
+Supports Windows, Mac, and Linux.
 
 ## Requirements
 
