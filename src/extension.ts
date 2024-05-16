@@ -65,9 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
 			runTempFile();
 		} 
 		
-		else {
-			outputChannel.appendLine("MATLAB terminal is not running. Started one.");
-
+		else { 
 			// start the MATLAB terminal
 			try { 
 				await vscode.commands.executeCommand('matlab.openCommandWindow');
@@ -90,17 +88,19 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			// send the code to the terminal
-			runTempFile();
+			// if the terminal is not running, we start one but we need to wait a bit for it to start so we add a delay
+			setTimeout(async () => {
+				outputChannel.appendLine("MATLAB terminal is not running. Started one.");
+				// send the code to the terminal
+				runTempFile();
+			}, 1000);
+			// note that this is a very inconsistent way of checking if the terminal is ready to run code.
+			// cba to properly check if the terminal is ready, submit a PR if you want to fix this lol 
+			
 		}
 
 		function runTempFile() {
 			outputChannel.appendLine("Sending code to MATLAB terminal.");
-
-			if (matlabTerminal === null) {
-				vscode.window.showErrorMessage("Cannot retrieve MATLAB terminal");
-				return;
-			}
 
 			const fs = require('fs');
 
@@ -133,9 +133,15 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 
 			// write the code to a temporary file
+			
 			try {
 				fs.writeFileSync(fullpath, code);
 				setTimeout(() => {
+					if (matlabTerminal === null) {
+						vscode.window.showErrorMessage("Cannot retrieve MATLAB terminal");
+						return;
+					}
+
 					// call the temporary file in the terminal
 					try {
 						matlabTerminal.sendText(tempFileName.replace(/\.m$/, ''));
