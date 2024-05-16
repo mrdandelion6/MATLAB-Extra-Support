@@ -177,7 +177,6 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			await sleep(100);
 
-
 			// call the temporary file in the terminal
 			try {
 				matlabTerminal.sendText(tempFileName.replace(/\.m$/, ''));
@@ -194,8 +193,6 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showErrorMessage(`Could not delete temp file '${tempFileName}'.`);
 				return;
 			}
-
-			
 		};
 	}
 
