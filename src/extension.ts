@@ -44,6 +44,37 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	let disposable2 = vscode.commands.registerCommand('matlab-extra-support.runAllSectionsAbove', async () => {
+		
+		const editor = vscode.window.activeTextEditor;
+		if (editor) {
+			const document = editor.document; // retrieve the document the editor is on
+
+			if (document.languageId === 'matlab') {
+
+				const cursorPosition = editor.selection.active;
+				let endSectionLine = cursorPosition.line;
+
+				// we want from start of entire document!
+				let startSectionLine = 0;
+
+				// now find the end of the current section
+				while(endSectionLine < document.lineCount - 1 && !document.lineAt(endSectionLine).text.startsWith('%%')) {
+					endSectionLine++;
+				}
+
+				const sectionRange = new vscode.Range(startSectionLine, 0, endSectionLine, document.lineAt(endSectionLine).text.length);
+        		let sectionText = document.getText(sectionRange);
+				
+				// trim the section text and remove the '%%' from the starst and end
+				sectionText = sectionText.replace(/^%%|%%$/g, '').trim();
+				outputChannel.appendLine(sectionText);
+
+				runCode(sectionText, document);
+			}
+		}
+	});
+
 	async function runCode(code: string, document: vscode.TextDocument) {
 		const path = require('path');
 		const documentPath = document.uri.fsPath; // retrieve the path of the document
@@ -99,7 +130,7 @@ export function activate(context: vscode.ExtensionContext) {
 			
 		}
 
-		function runTempFile() {
+		async function runTempFile() {
 			outputChannel.appendLine("Sending code to MATLAB terminal.");
 
 			const fs = require('fs');
@@ -132,43 +163,47 @@ export function activate(context: vscode.ExtensionContext) {
 				fullpath = directoryPath + tempFileName;
 			}
 
+			if (matlabTerminal === null) {
+				vscode.window.showErrorMessage("Cannot retrieve MATLAB terminal.");
+				return;
+			}
+
 			// write the code to a temporary file
-			
 			try {
 				fs.writeFileSync(fullpath, code);
-				setTimeout(() => {
-					if (matlabTerminal === null) {
-						vscode.window.showErrorMessage("Cannot retrieve MATLAB terminal");
-						return;
-					}
-
-					// call the temporary file in the terminal
-					try {
-						matlabTerminal.sendText(tempFileName.replace(/\.m$/, ''));
-					} catch (error) {
-						vscode.window.showErrorMessage(`Error sending code from temp file '${tempFileName}' to MATLAB terminal.`);
-						return;
-					}
-
-					setTimeout(() => {
-						// delete the temporary file
-						try {
-							fs.unlinkSync(fullpath);
-						} catch (error) {
-							vscode.window.showErrorMessage(`Could not delete temp file '${tempFileName}'.`);
-							return;
-						}
-					}, 200);
-				}, 100);
-				
 			} catch (error) {
 				vscode.window.showErrorMessage(`Could not create temp file '${tempFileName}' to send code to MATLAB terminal.`);
 				return;
 			}
+			await sleep(100);
+
+
+			// call the temporary file in the terminal
+			try {
+				matlabTerminal.sendText(tempFileName.replace(/\.m$/, ''));
+			} catch (error) {
+				vscode.window.showErrorMessage(`Error sending code from temp file '${tempFileName}' to MATLAB terminal.`);
+				return;
+			}
+			await sleep(200);
+
+			// delete the temporary file
+			try {
+				fs.unlinkSync(fullpath);
+			} catch (error) {
+				vscode.window.showErrorMessage(`Could not delete temp file '${tempFileName}'.`);
+				return;
+			}
+
+			
 		};
 	}
 
-	context.subscriptions.push(disposable1);
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+
+	context.subscriptions.push(disposable1, disposable2);
 }
 
 // This method is called when your extension is deactivated

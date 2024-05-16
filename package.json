@@ -14,12 +14,26 @@
   "contributes": {
     "commands": [
       {
-        "command": "matlab-extra-support.helloWorld",
-        "title": "Hello World"
+        "command": "matlab-extra-support.runAllSectionsAbove",
+        "title": "Run All Sections Above"
       },
       {
         "command": "matlab-extra-support.runSection",
         "title": "Run Code Section"
+      }
+    ],
+    "keybindings": [
+      {
+          "command": "matlab-extra-support.runSection",
+          "key": "ctrl+enter",
+          "mac": "cmd+enter",
+          "when": "editorTextFocus && editorLangId == matlab"
+      },
+      {
+          "command": "matlab-extra-support.runAllSectionsAbove",
+          "key": "ctrl+shift+enter",
+          "mac": "cmd+shift+enter",
+          "when": "editorTextFocus && editorLangId == matlab"
       }
     ]
   },
