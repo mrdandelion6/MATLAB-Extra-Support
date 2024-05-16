@@ -1,35 +1,35 @@
-# matlab-extra-support README
+# MATLAB Extra Support
 
-This is the README for your extension "matlab-extra-support". After writing up a brief description, we recommend including the following sections.
+This Visual Studio code extension provides additional features to the MATLAB extension by *MathWorks*. Users can run individual sections of code in a MATLAB file directly inside VS Code.
 
-## Features
+![Example usage GIF](examples/individual_section_running_demo.gif)
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Usage and Features
 
-For example if there is an image subfolder under your extension project workspace:
+To run a particular section of code, have your cursor within that section and then run the `Run Current Section` command through command palette or by pressing **ctrl + enter**. Note that "sections" in MATLAB files are lines of code separated by `%%`. For example the following code has two sections.
 
-\!\[feature X\]\(images/feature-x.png\)
+```matlab
+%%
+x = 1;
+disp(x);
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+%%
+y = x + 2;
+disp(y);
+```
+You can also run the current section of code and all code above it by pressing **ctrl + shift + enter** or using the `Run Current Section and all Above` command through command palette.
+
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+This extension requires you to have the VS Code extension *MATLAB* by *MathWorks* installed.
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Currently there is an issue with the workspace variables persisting across different MATLAB terminal sessions. This is because of how the MATLAB extension by *MathWorks* works. I am working on a solution to reset the workspace each time but I am not yet sure how to since the MATLAB shell does not work like a normal terminal. 
+
+Feel free to open an issue if you find any problems, or even a PR if you have any solutions.
 
 ## Release Notes
 
@@ -37,35 +37,5 @@ Users appreciate release notes as you update your extension.
 
 ### 1.0.0
 
-Initial release of ...
+Initial release.
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

@@ -4,6 +4,10 @@
   "description": "Extra support for the MATLAB extension by MathWorks. Allows for line by line and individual section execution of MATLAB code files.",
   "version": "0.0.1",
   "publisher": "mrdandelion6",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrdandelion6/MATLAB-Extra-Support.git"
+  },
   "engines": {
     "vscode": "^1.89.0"
   },
@@ -16,11 +20,11 @@
     "commands": [
       {
         "command": "matlab-extra-support.runAllSectionsAbove",
-        "title": "Run All Sections Above"
+        "title": "Run Current Section and all Above"
       },
       {
         "command": "matlab-extra-support.runSection",
-        "title": "Run Code Section"
+        "title": "Run Current Section"
       }
     ],
     "keybindings": [
