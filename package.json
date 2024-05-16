@@ -16,6 +16,10 @@
       {
         "command": "matlab-extra-support.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "matlab-extra-support.runSection",
+        "title": "Run Code Section"
       }
     ]
   },
