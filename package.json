@@ -3,6 +3,7 @@
   "displayName": "MATLAB Extra Support",
   "description": "Extra support for the MATLAB extension by MathWorks. Allows for line by line and individual section execution of MATLAB code files.",
   "version": "0.0.1",
+  "publisher": "mrdandelion6",
   "engines": {
     "vscode": "^1.89.0"
   },
